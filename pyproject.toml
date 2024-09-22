@@ -1,0 +1,16 @@
+[project]
+name = "luppolo"
+description = "Luppolo is a DSL capable of manipulating algebraic expressions. The interpreter is written in Python using ANTLR4 as a parser generator."
+version = "0.1.0"
+authors = [{ name = "Andrea Longoni" }]
+
+readme = "README.md"
+
+license = { file = "LICENSE" }
+
+requires-python = ">=3.10"
+
+dependencies = ["antlr4-python3-runtime == 4.13.1"]
+
+[tool.ruff]
+exclude = ["src/grammar/*.py"]
