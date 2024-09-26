@@ -14,7 +14,7 @@ Project specifications [here](https://github.com/let-unimi/progetti/tree/master/
 - **Trace Execution:** Visualize the stack trace during program execution.
 - **Argument Passing:** Pass arguments directly to the program from the command line.
 - **Optimization:** Optimize the Luppolo Abstract Syntax Tree (AST) before execution or compilation.
-<!-- - **Automated Testing:** Run unit tests using `pytest` for `.lpp` programs to validate output. -->
+- **Automated Testing:** Run unit tests using `pytest` for `.lpp` programs to validate output.
   
 ## Requirements
 
@@ -27,7 +27,7 @@ Project specifications [here](https://github.com/let-unimi/progetti/tree/master/
 - [ANTLR 4.13.1](https://www.antlr.org/download/antlr-4.13.1-complete.jar)
 - Python Packages:
   - `ruff`
-<!--   - `pytest` -->
+  - `pytest`
 
 <!-- 
 ## Installation
@@ -40,7 +40,7 @@ Project specifications [here](https://github.com/let-unimi/progetti/tree/master/
 
 2. Install dependencies:
    ```bash
-   pip install -e .
+   pip install .
    ```
 
 3. Ensure that the Luppolo CLI tool is ready for use:
@@ -105,16 +105,13 @@ python -m src.main run path/to/ir_output.json [args...]
   ```bash
   python -m src.main run --trace path/to/file.lpp
   ```
-<!-- 
+
 ### Testing Luppolo Programs
 
-You can run automated tests for all `.lpp` files located in the `tests/test_cases/` directory. Each test compares the program output with its corresponding expected output in `tests/expected_output/`.
+You can run automated tests for all `.lpp` files located in the `test/` directory.
 
 To run the tests:
 
 ```bash
 pytest test/
 ```
-
-This will automatically detect all `.lpp` test cases and verify their output.
- -->

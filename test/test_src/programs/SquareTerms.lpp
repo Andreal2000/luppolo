@@ -1,0 +1,15 @@
+SquareTerms(Sum) {
+  Result = 0
+  foreach Term in Sum {
+    Result = Result + Term ^ 2
+  }
+  return Result
+}
+
+Main(N) {
+  Result = 1 + x
+  repeat N {
+    Result = Result + SquareTerms(Result)
+  }
+  return Expand(Result)
+}

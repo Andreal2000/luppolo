@@ -190,13 +190,91 @@ class Expression:
 
     def print(self):
         order = ["A", "M", "P", "N", "S"]
-        op = {"P": "^", "M": "*", "A": "+"}
         index = order.index(self.type)
+
         match self.type:
             case "N" | "S":
                 return str(self[0])
-            case "A" | "P" | "M":
-                return op[self.type].join(
+
+            case "A":
+                operand_str = self.operands[0].print()
+                result = (
+                    operand_str
+                    if order.index(self[0].type) > index
+                    else f"({operand_str})"
+                )
+                for operand in self.operands[1:]:
+                    operand_str = operand.print()
+
+                    if operand.type == "N" and operand[0] < 0:
+                        operand_str = f" - {abs(operand[0])}"
+                    elif (
+                        operand.type == "M"
+                        and operand[0].type == "N"
+                        and operand[0][0] < 0
+                    ):
+                        operand_str = f" - {operand_str[3:] if operand[0][0] == -1 else operand_str[1:]}"
+                    elif (
+                        operand.type == "P"
+                        and operand[0].type == "N"
+                        and operand[0][0] < 0
+                    ):
+                        operand_str = f" - {operand_str[1:]}"
+                    else:
+                        operand_str = f" + {operand_str}"
+
+                    result += (
+                        operand_str
+                        if order.index(operand.type) > index
+                        else f"{operand_str[:3]}({operand_str[3:]})"
+                    )
+
+                return result
+
+            case "M":
+                operand_str = self.operands[0].print()
+                result = (
+                    operand_str
+                    if order.index(self[0].type) > index
+                    else f"({operand_str})"
+                )
+                for operand in self.operands[1:]:
+                    operand_str = operand.print()
+
+                    if (
+                        operand.type == "P"
+                        and operand[1].type == "N"
+                        and operand[1][0] <= -1
+                    ):
+                        den = pow(operand[0], abs(operand[1][0]))
+                        operand_str = (
+                            f"/{den if den.type in ['P', 'N', 'S'] else f'({den})'}"
+                        )
+                    else:
+                        operand_str = f" * {operand_str}"
+
+                    result += (
+                        operand_str
+                        if order.index(operand.type) > index
+                        else f"{operand_str[:3]}({operand_str[3:]})"
+                    )
+
+                if result.startswith("-1 * -"):
+                    result = result.replace("-1 * ", "+", 1)
+                if result.startswith("-1 * "):
+                    result = result.replace("-1 * ", "-", 1)
+
+                return result
+
+            case "P":
+                base = self.operands[0]
+                exp = self.operands[1]
+
+                if exp.type == "N" and exp[0] <= -1:
+                    den = pow(base, abs(exp[0]))
+                    return f"1/{den if den.type in ['P', 'N', 'S'] else f'({den})'}"
+
+                return "^".join(
                     map(
                         lambda x: x.print()
                         if order.index(x.type) > index
@@ -224,6 +302,9 @@ class Expression:
                 return self.operands < value.operands
             else:
                 return order.index(self.type) < order.index(value.type)
+
+    def __le__(self, value: object) -> bool:
+        return self < value or self == value
 
     def expand(self):
         def expand_pow(self):
@@ -277,7 +358,7 @@ class Expression:
         for i in range(len(expr.operands)):
             if expr[i] == match:
                 expr.operands[i] = subst
-            elif expr[i] is Expression and expr[i].type in ("A", "M", "P"):
+            elif type(expr[i]) is Expression and expr[i].type in ("A", "M", "P"):
                 expr.operands[i] = expr[i].substitute(match, subst)
 
         return Expression(expr.type, *expr.operands)
@@ -361,7 +442,7 @@ class Expression:
             raise Exception("Second argument must be a symbol")
 
         expr = self.expand()
-        symbols = expr.find_symbols()
+        symbols = sorted(expr.find_symbols())
         if len(symbols) == 1 and symbols[0] == sym:
             return expr.simple_derive(sym)
         else:

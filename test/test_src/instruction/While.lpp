@@ -1,0 +1,40 @@
+Main() {
+    Result = 0
+
+    Result = Result + 5
+    while Result > 0 {
+        Result = Result - 1
+    }
+
+    while false {
+        Result = Result + a
+    }
+
+    Loop = 0
+    while Eval(2^x, Loop) < 100 {
+        Loop = Loop + 1
+    }
+    if !(Loop == 7) { Result = Result + b }
+
+    Result = Result + 10*c
+    Outer = 0
+    while Outer < 5 {
+        Inner = 0
+        while Inner < 2 {
+            Result = Result - c
+            Inner = Inner + 1
+        }
+        Outer = Outer + 1
+    }
+
+    Result = Result + 10
+    while Result > 0 {
+        if Result == 5 {
+            Result = Result - 2
+        } else {
+            Result = Result - 1
+        }
+    }
+
+    return Result
+}

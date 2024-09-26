@@ -1,0 +1,40 @@
+Main() {
+    Result = 0
+
+    A = x + y + z
+    AA = 1
+    foreach Term in A {
+        AA = AA * Term
+    }
+    if !(AA == x*y*z) { Result = Result + a }
+
+    B = 0
+    BB = 1
+    foreach Term in B {
+        BB = BB * Term
+    }
+    if !(BB == 0) { Result = Result + b }
+
+    C = x+1
+    CC = 0
+    foreach Term in C {
+        CC = CC + Term^2
+    }
+    if !(CC == 1 + x^2) { Result = Result + c }
+
+    D = (x * (y + z)) + (a * b)
+    DD = 0
+    foreach Term in D {
+        DD = DD + Term / x
+    }
+    if !(DD == y + z + (a*b)/x) { Result = Result + d }
+
+    E = x*y*z
+    EE = 2
+    foreach Term in E {
+        EE = EE ^ Term 
+    }
+    if !(EE == ((2^x)^y)^z) { Result = Result + e }
+
+    return Result
+}

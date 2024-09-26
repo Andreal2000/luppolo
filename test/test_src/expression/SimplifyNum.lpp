@@ -1,0 +1,7 @@
+Main() {
+    if x * (1 + 4^(1/2)) == 3*x {
+        return 0
+    } else {
+        return 1
+    }
+}

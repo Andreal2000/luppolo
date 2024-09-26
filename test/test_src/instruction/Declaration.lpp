@@ -1,0 +1,23 @@
+Main() {
+    Result = 0
+
+    A = 5
+    if !(A == 5) { Result = Result + a }
+
+    B = (A^2 + 59) / 2
+    if !(B == 42) { Result = Result + b }
+
+    C = 10
+    C = 100
+    if !(C == 100) { Result = Result + c }
+
+    D = 1
+    DD = 1
+    if !(D == DD) { Result = Result + d }
+
+    E = 0
+    EE = E
+    if !(E == EE) { Result = Result + e }
+
+    return Result
+}

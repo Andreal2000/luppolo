@@ -1,0 +1,15 @@
+Main() {
+    Result = 0
+
+    if !(DerivePolynomial(x^3 + 2*x^2 + x, x) == 3*x^2 + 4*x + 1) { Result = Result + a }
+
+    if !(DerivePolynomial(5*x^4 + 3*x^2 + 7, x) == 20*x^3 + 6*x) { Result = Result + b }
+
+    if !(DerivePolynomial(2*y^3 + y^2 + 4*y + 1, y) == 6*y^2 + 2*y + 4) { Result = Result + c }
+
+    if !(DerivePolynomial(7*x^5 + 3*x^4 + x, x) == 35*x^4 + 12*x^3 + 1) { Result = Result + d }
+
+    if !(DerivePolynomial(9*x^6 + 5*x^3 + 2, x) == 54*x^5 + 15*x^2) { Result = Result + e }
+
+    return Result
+}

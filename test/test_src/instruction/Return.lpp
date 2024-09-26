@@ -1,0 +1,48 @@
+A() {
+    return 5
+}
+
+B() { 
+    Result = 42 
+    return Result
+}
+
+C() { 
+    Result = 0 
+    if 5 > 3 {
+        return 100
+    }
+    return Result
+}
+
+D() {
+    Result = 0
+    while Result < 5 {
+        if Result == 3 {
+            return Result
+        }
+        Result = Result + 1
+    }
+    return Result
+}
+
+E() { 
+    return 0 
+    return 1 
+}
+
+Main() {
+    Result = 0
+
+    if !(A() == 5) { Result = Result + a }
+
+    if !(B() == 42) { Result = Result + b }
+
+    if !(C() == 100) { Result = Result + c }
+
+    if !(D() == 3) { Result = Result + d }
+
+    if !(E() == 0) { Result = Result + e }
+
+    return Result
+}

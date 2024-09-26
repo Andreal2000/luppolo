@@ -1,0 +1,11 @@
+Main() {
+    Result = 0
+
+    if !(x + (y^2 + z) == x + z + y^2) { Result = Result + a }
+
+    if !(3 + x^2 + 2+y == 5 + y + x^2) { Result = Result + b }
+
+    if !(3*x + (1 + y^2)^(-1) + 2*x + 3*(1 + y^2)^(-1) == 4*(1 + y^2)^(-1) + 5*x) { Result = Result + c }
+
+    return Result
+}

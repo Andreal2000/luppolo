@@ -1,0 +1,13 @@
+Main() {
+    Result = 0
+
+    if !(0 ^ x == 0) { Result = Result + a }
+
+    if !(1 ^ x == 1) { Result = Result + b }
+
+    if !(x ^ 0 == 1) { Result = Result + c }
+
+    if !(x ^ 1 == x) { Result = Result + d }
+
+    return Result
+}

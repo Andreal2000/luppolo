@@ -122,7 +122,9 @@ def interpreter(program, fun_name="Main", args=[], trace=False):
                     len_params = len(inspect.signature(func).parameters)
                     num_params = instr["value"]["parameters"]
 
-                    if (name == "Eval" and num_params < 2) or len_params != num_params:
+                    if (name == "Eval" and num_params < 2) or (
+                        name != "Eval" and len_params != num_params
+                    ):
                         raise Exception(
                             f"ERROR in {fun_name}: Called function {name} with incorrect number of parameters. "
                             + f"Expected {len_params}, but got {num_params}."

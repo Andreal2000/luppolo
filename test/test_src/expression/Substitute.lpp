@@ -1,0 +1,15 @@
+Main() {
+    Result = 0
+
+    if !(Substitute(2*(x+1) * a^(x+1), x+1, y) == 2*y * a^y) { Result = Result + a }
+
+    if !(Substitute(x+2*y, x, y) == 3*y) { Result = Result + b }
+
+    if !(Substitute(a^2 + 2*a*b + b^2, a, x) == x^2 + 2*x*b + b^2) { Result = Result + c }
+
+    if !(Substitute((x^2 + 2*x + 1) * (x + y), x^2 + 2*x + 1, z) == z * (x + y)) { Result = Result + d }
+
+    if !(Substitute(3*(x + 3) * y^3, 3, 1/2)) == 1/2 * (1/2+x) * y^(1/2) { Result = Result + e }
+
+    return Result
+}

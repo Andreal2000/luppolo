@@ -15,7 +15,7 @@ from src.interpreter.expression import num, sym
 from src.interpreter.interpreter import interpreter
 
 
-def compile_source(src: str, optimize_flag: bool, ast_flag: bool):
+def compile_source(src: str, optimize_flag: bool = False, ast_flag: bool = False):
     input_stream = InputStream(src)
     lexer = LuppoloLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
@@ -56,11 +56,11 @@ def compile_source(src: str, optimize_flag: bool, ast_flag: bool):
     return ir
 
 
-def run_ir(ir: dict, args: list, trace_flag: bool):
+def run_ir(ir: dict, args: list = [], trace_flag: bool = False):
     # Parse arguments
     processed_args = []
     for arg in args:
-        if arg.isdigit():
+        if (type(arg) is int) or (type(arg) is str and arg.isdigit()):
             processed_args.append(num(int(arg)))
         elif len(arg) == 1 and arg.islower():
             processed_args.append(sym(arg))
@@ -68,8 +68,7 @@ def run_ir(ir: dict, args: list, trace_flag: bool):
             raise Exception(f"ERROR in args: Invalid argument {arg}")
 
     # Execute the program
-    output = interpreter(ir, args=processed_args, trace=trace_flag)
-    print(output)
+    return interpreter(ir, args=processed_args, trace=trace_flag)
 
 
 if __name__ == "__main__":
@@ -142,8 +141,12 @@ if __name__ == "__main__":
                 src = f.read()
 
             if args.command == "run":
-                run_ir(
-                    compile_source(src, args.optimize, args.ast), args.args, args.trace
+                print(
+                    run_ir(
+                        compile_source(src, args.optimize, args.ast),
+                        args.args,
+                        args.trace,
+                    )
                 )
             elif args.command == "compile":
                 output_file = (
@@ -165,18 +168,20 @@ if __name__ == "__main__":
                 compiled_ir = json.load(f)
 
             if args.command == "run":
-                run_ir(compiled_ir, args.args, args.trace)
+                print(run_ir(compiled_ir, args.args, args.trace))
 
         else:
             raise Exception(f"ERROR: Unsupported file type: {args.file}")
 
     except FileNotFoundError as e:
         print(f"ERROR: {e}")
+        sys.exit(1)
     except PermissionError:
         print(f"ERROR: Permission denied while trying to open {args.file}")
+        sys.exit(1)
     except json.JSONDecodeError:
         print(f"ERROR: Failed to decode JSON from {args.file}")
+        sys.exit(1)
     except Exception as e:
         print(e)
-    finally:
         sys.exit(1)

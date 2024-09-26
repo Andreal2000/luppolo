@@ -1,0 +1,17 @@
+Main() {
+    Result = 0
+
+    Result = Result + a
+    if true { Result = Result - a }
+
+    if false { Result = Result + b }
+
+    if !true { Result = Result + c }
+
+    Result = Result + d
+    if !false { Result = Result - d }
+
+    if !(Result == 0) { Result = Result + e }
+
+    return Result
+}
