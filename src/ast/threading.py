@@ -5,16 +5,20 @@ from src.interpreter.stdlib import STDLIB
 
 
 def set_thread(ast, name, node):
+    """Sets a jump thread (e.g., "next", "true", "false") from an AST node to another node."""
     ast.jumps[name] = node
 
 
 def concat_threads(prev, succ):
+    """Concatenates two threads by setting the "next" pointer of the last node in the `prev` thread to the first node in the `succ` thread, and returns the concatenated result."""
     if prev:
         set_thread(prev[-1], "next", succ[0])
     return prev + succ
 
 
 def thread_to_json(thread):
+    """Converts the threaded AST (as a dictionary) into a JSON-friendly format by serializing each node's kind, value, and jumps."""
+
     def to_json(threads):
         program = []
         for t in threads:
@@ -33,6 +37,10 @@ def thread_to_json(thread):
 
 
 def thread_program(source):
+    """
+    Threads the entire program by traversing its AST.
+    It starts from the `Main` function, threads all the functions, and returns a dictionary where each function name maps to its threaded instructions.
+    """
     def thread(ast):
         match ast.kind:
             case TreeKind.PROGRAM:

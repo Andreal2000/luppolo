@@ -2,18 +2,22 @@ from antlr4.error.ErrorListener import ErrorListener
 
 
 def str_yellow(text: str) -> str:
+    """Wraps the given text in ANSI codes to make it appear yellow in the terminal."""
     return f"\033[93m{text}\033[0m"
 
 
 def str_red(text: str) -> str:
+    """Wraps the given text in ANSI codes to make it appear red in the terminal."""
     return f"\033[91m{text}\033[0m"
 
 
 def str_bold(text: str) -> str:
+    """Wraps the given text in ANSI codes to make it appear bold in the terminal."""
     return f"\033[1m{text}\033[0m"
 
 
 def format_message(title: str, text: str, source_code: str, highlighted: str) -> str:
+    """Formats the title, description, source code and a highlighted portion of the error message."""
     return f"""
 {title}: {text}
 {source_code}
@@ -22,20 +26,33 @@ def format_message(title: str, text: str, source_code: str, highlighted: str) ->
 
 
 class LuppoloErrorListener(ErrorListener):
+    """
+    LuppoloErrorListener is a custom error listener that extends ANTLR's ErrorListener class.
+    It tracks and reports both syntax warnings and errors encountered during the parsing process.
+    The listener differentiates between recoverable syntax warnings and non-recoverable syntax errors, providing formatted output for each.
+
+    Attributes:
+        errors (int): Counter for the number of syntax errors encountered.
+        warnings (int): Counter for the number of syntax warnings encountered.
+    """
+
     def __init__(self) -> None:
         super().__init__()
         self.errors = 0
         self.warnings = 0
 
     def getErrorCount(self):
+        """Returns the number of syntax errors encountered."""
         return self.errors
 
     def getWarningCount(self):
+        """Returns the number of syntax warnings encountered."""
         return self.warnings
 
     def reportAmbiguity(
         self, recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs
     ):
+        """Handles ambiguity in parsing by delegating to the base class implementation."""
         return super().reportAmbiguity(
             recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs
         )
@@ -43,6 +60,7 @@ class LuppoloErrorListener(ErrorListener):
     def reportAttemptingFullContext(
         self, recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs
     ):
+        """Handles full context attempts in parsing by delegating to the base class implementation."""
         return super().reportAttemptingFullContext(
             recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs
         )
@@ -50,15 +68,22 @@ class LuppoloErrorListener(ErrorListener):
     def reportContextSensitivity(
         self, recognizer, dfa, startIndex, stopIndex, prediction, configs
     ):
+        """Handles context sensitivity in parsing by delegating to the base class implementation."""
         return super().reportContextSensitivity(
             recognizer, dfa, startIndex, stopIndex, prediction, configs
         )
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+        """
+        Custom handler for syntax errors and warnings.
+        Outputs formatted messages indicating the nature of the issue, highlighting the problematic code with context, and distinguishing between warnings and errors.
+        """
+
         # Retrieve the input list (lines of code) from the recognizer
-        input_list = recognizer.getInputStream().tokenSource.inputStream.strdata.split(
-            "\n"
+        input_list = (
+            recognizer.getInputStream().tokenSource.inputStream.strdata.splitlines()
         )
+
         error_line = input_list[line - 1]
 
         # Check if it's a syntax warning (e.g., automatically recoverable) or an error

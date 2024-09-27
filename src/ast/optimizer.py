@@ -4,6 +4,43 @@ from src.ast.tree import Tree, TreeKind
 
 
 def optimize(ast):
+    """
+    Performs AST optimization by simplifying constant expressions, removing code, and making the AST more compact for execution.
+
+    Args:
+        ast (Tree): The abstract syntax tree to optimize.
+
+    Returns:
+        ast (Tree | None): The optimized AST or a simplified subtree.
+        If a node is redundant, the function may return None or remove unnecessary children.
+
+    Optimization Cases:
+        - PROGRAM, FUNCTION, DECLARATION_INSTRUCTION, FOREACH_INSTRUCTION, RETURN_INSTRUCTION, FUNCTION_CALL_EXPRESSION:
+            Optimizes the child nodes recursively.
+        - BLOCK:
+            Optimizes all instructions and remove unreachable instruction placed after `RETURN_INSTRUCTION`.
+        - POW_EXPRESSION:
+            Simplifies expressions like x^1 and evaluates constant powers.
+        - MUL_DIV_EXPRESSION:
+            Simplifies constant multiplications and divisions, removes multiplications by 1.
+        - UNARY_EXPRESSION:
+            Optimizes unary plus and minus operations, simplifies nested negatives.
+        - ADD_SUB_EXPRESSION:
+            Simplifies additions/subtractions with 0 and evaluates constant expressions.
+        - IF_INSTRUCTION, IF_ELSE_INSTRUCTION:
+            Optimizes branches based on constant conditions.
+        - REPEAT_INSTRUCTION:
+            Removes repeat loops with 0 iterations or optimizes when only 1 iteration is needed.
+        - WHILE_INSTRUCTION:
+            Removes while loops when the condition is false.
+        - NOT_CONDITION:
+            Simplifies boolean NOT conditions.
+        - AND_CONDITION, OR_CONDITION:
+            Simplifies boolean AND/OR expressions when both operands are boolean literals.
+        - COMPARISON_CONDITION:
+            Simplifies comparison operations when both operands are constants.
+    """
+
     match ast.kind:
         case (
             TreeKind.PROGRAM

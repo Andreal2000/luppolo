@@ -6,6 +6,15 @@ from src.interpreter.stdlib import STDLIB
 
 
 def interpreter(program, fun_name="Main", args=[], trace=False):
+    """
+    Interprets a given program represented as a dictionary of functions, executing the instructions in the specified function.
+
+    Parameters:
+      `program`: A dictionary representing the program, where keys are function names and values are lists of instructions.
+      `fun_name`: The name of the function to execute, defaulting to "Main".
+      `args`: A list of arguments to pass to the function when it is called.
+      `trace`: A boolean indicating whether to print the execution trace of the program (default is `False`).
+    """
     GLOBAL_MEMORY = {}
     STACK = []
     IP = 0

@@ -16,6 +16,20 @@ from src.interpreter.interpreter import interpreter
 
 
 def compile_source(src: str, optimize_flag: bool = False, ast_flag: bool = False):
+    """
+    Compiles the source code into an Intermediate Representation (IR).
+
+    This function takes a string of source code, processes it through the lexer and parser, and generates an IR representation.
+    It optionally optimizes the AST and prints the AST based on the provided flags.
+
+    Parameters:
+      src (str): The source code to compile.
+      optimize_flag (bool): If True, optimizes the AST before generating IR.
+      ast_flag (bool): If True, prints the AST of the source code.
+
+    Returns:
+      dict: The generated IR in JSON format.
+    """
     input_stream = InputStream(src)
     lexer = LuppoloLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
@@ -57,6 +71,19 @@ def compile_source(src: str, optimize_flag: bool = False, ast_flag: bool = False
 
 
 def run_ir(ir: dict, args: list = [], trace_flag: bool = False):
+    """
+    Executes the given Intermediate Representation (IR) with the provided arguments.
+
+    This function prepares the arguments by converting them into appropriate Expression instances before executing the IR.
+
+    Parameters:
+      ir (dict): The Intermediate Representation to execute.
+      args (list): A list of arguments to pass to the program.
+      trace_flag (bool): If True, enables tracing of the stack interpreter during execution.
+
+    Returns:
+      The result of the execution.
+    """
     # Parse arguments
     processed_args = []
     for arg in args:

@@ -4,27 +4,37 @@ from itertools import product
 
 
 def add(*a):
+    """Creates an addition expression from the provided operands."""
     return Expression("A", *a)
 
 
 def mul(*m):
+    """Creates a multiplication expression from the provided operands."""
     return Expression("M", *m)
 
 
 def pow(*p):
+    """Creates an exponentiation expression from the provided base and exponent."""
     return Expression("P", *p)
 
 
 def num(n):
+    """Creates a number expression from the given value."""
     return Expression("N", n)
 
 
 def sym(s):
+    """Creates a symbol expression from the given symbol."""
     return Expression("S", s)
 
 
 class Expression:
     def __init__(self, expr_type, *operands) -> None:
+        """
+        Initializes an `Expression` object based on the given type and operands.
+        The expression is automatically simplified.
+        """
+
         self.type = expr_type.upper()
         self.operands = []
         for op in operands:
@@ -114,7 +124,6 @@ class Expression:
                         case "N":
                             numbers = num(numbers[0] + operand[0])
                         case "M":
-                            # ottimizazione il numero dovrebbe essere sempre primo
                             n = [i for i in operand.operands if i.type == "N"]
 
                             if n == []:
@@ -158,37 +167,46 @@ class Expression:
                 print("ERROR OPERANDS", self.type)
 
     def init_copy(self, expr):
+        """Copies the type and operands from another expression into the current one."""
         self.type, self.operands = expr.type, expr.operands
 
     def init_add(self, *a):
+        """Initializes the current expression as an addition expression."""
         self.type, self.operands = "A", list(a)
 
     def init_mul(self, *m):
+        """Initializes the current expression as a multiplication expression."""
         self.type, self.operands = "M", list(m)
 
     def init_pow(self, *p):
+        """Initializes the current expression as a power expression."""
         self.type, self.operands = "P", list(p)
 
     def init_num(self, n):
+        """Initializes the current expression as a numeric expression."""
         self.type, self.operands = "N", [Fraction(n)]
 
     def init_sym(self, s):
+        """Initializes the current expression as a symbolic expression."""
         self.type, self.operands = "S", [s]
 
     def __getitem__(self, key):
+        """Accesses the operand at the specified index."""
         return self.operands[key]
 
-    # TODO def _ display latex
     def __repr__(self) -> str:
+        """Returns a string representation of the expression."""
         return self.print()
 
     def print_tree(self, verbous=False):
+        """Prints the expression in a tree-like structure with the option for verbose output."""
         if self.type in ("N", "S"):
             return f"{self.type}({self[0]})" if verbous else str(self[0])
         else:
             return f"{self.type}({', '.join(map(lambda x: x.print_tree(verbous), self.operands))})"
 
     def print(self):
+        """Returns the string representation of the expression similar to the one common used in math."""
         order = ["A", "M", "P", "N", "S"]
         index = order.index(self.type)
 
@@ -284,9 +302,11 @@ class Expression:
                 )
 
     def __hash__(self) -> int:
+        """Returns the hash value for the expression."""
         return str(self).__hash__()
 
     def __eq__(self, value: object) -> bool:
+        """Checks if the current expression is equal to the given value."""
         match value:
             case int() | float() | Fraction():
                 return self.type == "N" and self[0] == value
@@ -296,6 +316,7 @@ class Expression:
                 return self.type == value.type and self.operands == value.operands
 
     def __lt__(self, value: object) -> bool:
+        """Checks if the current expression is less than the given value."""
         order = ["N", "A", "S", "P", "M"]
         if type(value) is Expression:
             if order.index(self.type) == order.index(value.type):
@@ -304,9 +325,12 @@ class Expression:
                 return order.index(self.type) < order.index(value.type)
 
     def __le__(self, value: object) -> bool:
+        """Checks if the current expression is less than or equal to the given value."""
         return self < value or self == value
 
     def expand(self):
+        """Expands the current expression by applying the algebraic properties of sums, products and powers."""
+
         def expand_pow(self):
             if self[1].type == "N":
                 numerator, denominator = self[1][0].as_integer_ratio()
@@ -353,6 +377,7 @@ class Expression:
         return expand_table[self.type](self)
 
     def substitute(self, match, subst):
+        """Substitutes occurrences of a specified expression `match` within the current expression with a new expression `subst`."""
         expr = Expression(self.type, *self.operands)
 
         for i in range(len(expr.operands)):
@@ -364,6 +389,7 @@ class Expression:
         return Expression(expr.type, *expr.operands)
 
     def find_symbols(self):
+        """Finds all symbols within the expression."""
         if self.type == "S":
             return self[0]
         if self.type == "N":
@@ -380,7 +406,13 @@ class Expression:
         return symbols
 
     def eval(self, *rat):
-        # Substitute the variables in alphabetical order
+        """
+        Evaluates the expression by substituting the provided rational numbers for the symbols present in the expression.
+
+        It substitutes each symbol with its corresponding rational number in alphabetical order.
+        For example, calling `Eval(y^x, 2, 3)` substitutes `x` with `2` and `y` with `3`, resulting in `3^2`, which evaluates to `9`.
+        """
+
         symbol = sorted(self.find_symbols())
         result = self
 
@@ -403,6 +435,8 @@ class Expression:
             )
 
     def simple_derive(self, sym):
+        """Calculates the derivative of the expression with respect to the given symbol."""
+
         def derive_pow(self):
             if self[1].type != "N":
                 raise Exception("Non-rational exponent in expression")
@@ -438,6 +472,7 @@ class Expression:
         return derive_table[self.type](self)
 
     def derive_polynomial(self, sym):
+        """Calculates the derivative of a univariate polynomial expression with respect to the given symbol."""
         if sym.type != "S":
             raise Exception("Second argument must be a symbol")
 
