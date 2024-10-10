@@ -29,25 +29,26 @@ Project specifications [here](https://github.com/let-unimi/progetti/tree/master/
   - `ruff`
   - `pytest`
 
-<!-- 
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/Andreal2000/luppolo.git
    cd luppolo
    ```
 
 2. Install dependencies:
+
    ```bash
    pip install .
    ```
 
 3. Ensure that the Luppolo CLI tool is ready for use:
-   ```bash
-   python -m src.main --help
-   ```
--->
+
+    ```bash
+    python -m src.main --help
+    ```
 
 ## Usage
 
